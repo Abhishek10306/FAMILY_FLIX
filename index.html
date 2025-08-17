@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en" class="dark-mode">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FamilyFlix</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS Variables for a Premium Theme */
+        :root {
+            --dark-bg: #10141f;
+            --dark-card: #161d2f;
+            --dark-text-primary: #ffffff;
+            --dark-text-secondary: #c3c4c7;
+            --accent-color: #5a698f;
+            --prime-blue: #00a8e1; /* Prime Video Inspired Blue */
+            
+            --light-bg: #f8f9fa;
+            --light-card: #ffffff;
+            --light-text-primary: #10141f;
+            --light-text-secondary: #5a6069;
+            
+            --border-radius: 12px;
+            --transition-speed: 0.3s ease;
+            --card-shadow-light: 0 4px 15px rgba(0, 0, 0, 0.05);
+            --card-shadow-dark: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        html.light-mode {
+            --dark-bg: var(--light-bg);
+            --dark-card: var(--light-card);
+            --dark-text-primary: var(--light-text-primary);
+            --dark-text-secondary: var(--light-text-secondary);
+            --card-shadow-dark: var(--card-shadow-light);
+        }
+        
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Lexend', sans-serif;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--dark-text-primary);
+            transition: background-color var(--transition-speed), color var(--transition-speed);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        /* Header & Logo */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4rem;
+        }
+        
+        .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark-text-primary);
+            display: flex;
+            align-items: center;
+        }
+
+        .logo span {
+            font-weight: 400;
+            color: var(--prime-blue);
+        }
+
+        /* Theme Toggle Switch */
+        .theme-switch {
+            display: flex;
+            align-items: center;
+        }
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 28px;
+        }
+        .switch input { display: none; }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: var(--dark-card);
+            transition: var(--transition-speed);
+            border-radius: 28px;
+            border: 1px solid var(--accent-color);
+        }
+        .slider:before {
+            position: absolute;
+            content: "🌙";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px;
+            background-color: var(--accent-color);
+            transition: var(--transition-speed);
+            border-radius: 50%;
+        }
+        input:checked + .slider { background-color: var(--light-card); }
+        html.dark-mode input:checked + .slider:before {
+            transform: translateX(22px);
+            content: "☀️";
+            background-color: var(--prime-blue);
+        }
+        html.light-mode .slider:before {
+             transform: translateX(22px);
+             content: "☀️";
+             background-color: var(--prime-blue);
+        }
+        html.light-mode input:checked + .slider:before {
+            transform: translateX(0px);
+            content: "🌙";
+            background-color: var(--accent-color);
+        }
+
+        /* Movie Grid (3x2 Matrix) */
+        .movie-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .movie-card {
+            background-color: var(--dark-card);
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+            overflow: hidden;
+            border: 1px solid transparent;
+            box-shadow: var(--card-shadow-dark);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            aspect-ratio: 16 / 10; /* Maintain consistent shape */
+        }
+        
+        .movie-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--accent-color);
+            box-shadow: 0 10px 25px rgba(0, 168, 225, 0.2);
+        }
+
+        .play-icon svg {
+            width: 50px;
+            height: 50px;
+            fill: var(--dark-text-secondary);
+            transition: fill var(--transition-speed);
+        }
+        
+        .movie-card:hover .play-icon svg {
+            fill: var(--prime-blue);
+        }
+        
+        .movie-title {
+            margin-top: 1rem;
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--dark-text-secondary);
+            transition: color var(--transition-speed);
+        }
+
+        .movie-card:hover .movie-title {
+            color: var(--dark-text-primary);
+        }
+
+        /* Simplified Request Form */
+        .request-form-section {
+            margin-top: 5rem;
+            padding: 3rem;
+            background-color: var(--dark-card);
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow-dark);
+        }
+        
+        .form-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .request-form {
+            display: flex;
+            gap: 1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-input {
+            flex-grow: 1;
+            padding: 0.9rem 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--accent-color);
+            background-color: var(--dark-bg);
+            color: var(--dark-text-primary);
+            font-size: 1rem;
+            transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--prime-blue);
+            box-shadow: 0 0 10px rgba(0, 168, 225, 0.3);
+        }
+
+        .submit-button {
+            padding: 0.9rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #fff;
+            background-color: var(--prime-blue);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color var(--transition-speed), transform var(--transition-speed);
+        }
+
+        .submit-button:hover {
+            background-color: #007bff;
+            transform: scale(1.05);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            margin-top: 5rem;
+            padding: 2rem 0;
+            color: var(--accent-color);
+            border-top: 1px solid var(--dark-card);
+        }
+
+        /* Video Player Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s;
+        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .modal-content {
+            width: 90%;
+            max-width: 1100px;
+            position: relative;
+        }
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+        }
+        .video-container iframe, .video-container video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: var(--border-radius);
+        }
+        .close-button {
+            position: absolute;
+            top: -45px;
+            right: -10px;
+            color: #fff;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s, transform 0.3s;
+        }
+        .close-button:hover { color: var(--prime-blue); transform: scale(1.1); }
+        
+        /* Responsive Design */
+        @media (max-width: 900px) {
+            .movie-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .logo { font-size: 1.5rem; }
+            .movie-grid {
+                grid-template-columns: 1fr;
+            }
+            .request-form {
+                flex-direction: column;
+            }
+            .container { padding: 2rem 1rem; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- HEADER -->
+        <header>
+            <div class="logo">Family<span>Flix</span></div>
+            <label class="switch">
+                <input type="checkbox" id="theme-toggle">
+                <span class="slider"></span>
+            </label>
+        </header>
+
+        <main>
+            <!-- =============================================================================== -->
+            <!-- MOVIE GRID - EDIT YOUR MOVIES BELOW                                             -->
+            <!-- Instructions:                                                                   -->
+            <!-- 1. To get the embed link from Google Drive:                                     -->
+            <!--    - Open your video, click the three dots, then 'Share'.                       -->
+            <!--    - Change 'Restricted' to 'Anyone with the link'.                             -->
+            <!--    - Copy the link. It looks like:                                              -->
+            <!--      https://drive.google.com/file/d/FILE_ID/view?usp=sharing                   -->
+            <!--    - Change '/view?usp=sharing' to '/preview'. The final link will be:          -->
+            <!--      https://drive.google.com/file/d/FILE_ID/preview                            -->
+            <!-- 2. Copy a whole "MOVIE BLOCK" to add a new movie.                               -->
+            <!-- =============================================================================== -->
+            <section class="movie-grid">
+                
+                <!-- MOVIE 1 BLOCK (Your Real Movie) -->
+                <div class="movie-card" data-video-src="https://drive.google.com/file/d/11_57daTjKXb-Pe4rvuuILHyX3743goxQ/preview">
+                    <div class="play-icon">
+                        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>
+                    </div>
+                    <!-- CHANGE MOVIE NAME HERE -->
+                    <h3 class="movie-title">Your First Movie</h3>
+                </div>
+                
+                <!-- MOVIE 2 BLOCK (Dummy) -->
+                <div class="movie-card" data-video-src="DUMMY_LINK_2">
+                    <div class="play-icon">
+                        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>
+                    </div>
+                    <!-- CHANGE MOVIE NAME HERE -->
+                    <h3 class="movie-title">Movie 2</h3>
+                </div>
+
+                <!-- MOVIE 3 BLOCK (Dummy) -->
+                <div class="movie-card" data-video-src="DUMMY_LINK_3">
+                    <div class="play-icon">
+                        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>
+                    </div>
+                    <!-- CHANGE MOVIE NAME HERE -->
+                    <h3 class="movie-title">Movie 3</h3>
+                </div>
+
+                <!-- MOVIE 4 BLOCK (Dummy) -->
+                <div class="movie-card" data-video-src="DUMMY_LINK_4">
+                   <div class="play-icon">
+                        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>
+                    </div>
+                    <!-- CHANGE MOVIE NAME HERE -->
+                    <h3 class="movie-title">Movie 4</h3>
+                </div>
+
+                <!-- MOVIE 5 BLOCK (Dummy) -->
+                <div class="movie-card" data-video-src="DUMMY_LINK_5">
+                    <div class="play-icon">
+                        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>
+                    </div>
+                    <!-- CHANGE MOVIE NAME HERE -->
+                    <h3 class="movie-title">Movie 5</h3>
+                </div>
+
+                <!-- MOVIE 6 BLOCK (Dummy) -->
+                <div class="movie-card" data-video-src="DUMMY_LINK_6">
+                    <div class="play-icon">
+                        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>
+                    </div>
+                    <!-- CHANGE MOVIE NAME HERE -->
+                    <h3 class="movie-title">Movie 6</h3>
+                </div>
+
+            </section>
+            
+            <!-- REQUEST FORM SECTION -->
+            <section class="request-form-section">
+                <h2 class="form-title">Request a Movie</h2>
+                <form class="request-form" action="https://formspree.io/f/mvgqnqkp" method="POST">
+                    <input class="form-input" type="text" name="Movie Request" placeholder="Enter Movie Name" required>
+                    <button type="submit" class="submit-button">Send Request</button>
+                </form>
+            </section>
+        </main>
+
+        <!-- FOOTER -->
+        <footer>
+            <p>Made by Abhishek Chaudhary.</p>
+        </footer>
+    </div>
+    
+    <!-- VIDEO PLAYER MODAL -->
+    <div id="video-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <div id="player-container" class="video-container">
+                 <!-- Video player will be inserted here by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const themeToggle = document.getElementById('theme-toggle');
+            const htmlEl = document.documentElement;
+
+            // Load saved theme
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            htmlEl.className = `${savedTheme}-mode`;
+            themeToggle.checked = savedTheme === 'light';
+
+            // Theme toggle event
+            themeToggle.addEventListener('change', () => {
+                const newTheme = themeToggle.checked ? 'light' : 'dark';
+                htmlEl.className = `${newTheme}-mode`;
+                localStorage.setItem('theme', newTheme);
+            });
+            
+            // Modal functionality
+            const modal = document.getElementById('video-modal');
+            const closeButton = document.querySelector('.close-button');
+            const movieCards = document.querySelectorAll('.movie-card');
+            const playerContainer = document.getElementById('player-container');
+            
+            movieCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    const videoSrc = card.getAttribute('data-video-src');
+                    
+                    if (videoSrc.startsWith('DUMMY')) {
+                        alert('This is a placeholder. Please add a real Google Drive embed link in the HTML code.');
+                        return;
+                    }
+                    
+                    // Use iframe for Google Drive embed links for better compatibility
+                    playerContainer.innerHTML = `<iframe src="${videoSrc}" allow="autoplay" allowfullscreen></iframe>`;
+                    modal.style.display = 'flex';
+                });
+            });
+
+            // Close modal actions
+            const closeModal = () => {
+                modal.style.display = 'none';
+                playerContainer.innerHTML = ''; // Stop video by removing the iframe
+            };
+
+            closeButton.addEventListener('click', closeModal);
+            modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+            document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+        });
+    </script>
+</body>
+</html>```
